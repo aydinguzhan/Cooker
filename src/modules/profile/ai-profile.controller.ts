@@ -7,7 +7,7 @@ export async function generateProfileController(
   next: NextFunction,
 ) {
   try {
-    const { prompt } = req.body;
+    const { prompt, skills } = req.body;
 
     if (!prompt || typeof prompt !== "string") {
       return res.status(400).json({
@@ -15,7 +15,13 @@ export async function generateProfileController(
       });
     }
 
-    const profile = await generateProfileFromPrompt(prompt);
+    if (!Array.isArray(skills)) {
+      return res.status(400).json({
+        message: "Skills alanı zorunludur",
+      });
+    }
+
+    const profile = await generateProfileFromPrompt(prompt, skills);
 
     return res.status(200).json({
       message: "Profile generated successfully",

@@ -5,7 +5,9 @@ export const AiProfileSchema = z.object({
   bio_description: z.string(),
   skills: z.array(
     z.object({
+      skill_id: z.string(),
       name: z.string(),
+      short_key: z.string(),
       level: z.number().min(1).max(5),
     }),
   ),
