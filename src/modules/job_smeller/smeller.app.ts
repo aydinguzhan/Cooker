@@ -3,6 +3,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { gemini } from '../../providers/gemini.provider';
 import { jobSmellerBuildPrompt } from './smeller.propt';
 import { Job, jobResponseSchema, JobSchema } from './smeller.schema';
+import { env } from '../../config/env';
 
 puppeteer.use(StealthPlugin());
 
@@ -11,7 +12,7 @@ export async function scrapeWithAI(keyword: string): Promise<Job[]> {
     console.log(`[+] Kariyer.net üzerinde AI ile "${keyword}" araması başlatılıyor...`);
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: env.PUPPETEER_HEADLESS,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
@@ -19,7 +20,7 @@ export async function scrapeWithAI(keyword: string): Promise<Job[]> {
     await page.setViewport({ width: 1366, height: 768 });
 
     try {
-        const targetUrl = `https://www.kariyer.net/is-ilanlari?kw=${encodeURIComponent(keyword)}`;
+        const targetUrl = `${env.KARIYER_URL}?kw=${encodeURIComponent(keyword)}`;
         console.log(`[+] Sayfaya gidiliyor: ${targetUrl}`);
 
         await page.goto(targetUrl, {
@@ -92,7 +93,7 @@ export async function scrapeWithAI(keyword: string): Promise<Job[]> {
 }
 
 // Test çalıştırması
-scrapeWithAI('web').then((jobs) => {
+scrapeWithAI(env.SMELL_KEYWORD).then((jobs) => {
     console.log('Çekilen İlanlar:', JSON.stringify(jobs, null, 2));
     process.exit(0);
 });
