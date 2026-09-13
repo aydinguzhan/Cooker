@@ -2,14 +2,15 @@
 import express from "express";
 import cors from "cors";
 import profileAiRoutes from "./modules/profile/ai-profile.router";
+import smellerRouter from "./modules/job_smeller/smeller.router"
 import { errorMiddleware } from "./middlewares/error.middleware";
 
 export const app = express();
 
 app.use(
   cors({
-    origin: 'http://localhost:8080',
-    methods: ['GET','POST'],
+    origin: process.env.ORIGIN_URL,
+    methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
@@ -24,5 +25,6 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/ai/profile", profileAiRoutes);
+app.use("/ai/job-smell", smellerRouter);
 
 app.use(errorMiddleware);
