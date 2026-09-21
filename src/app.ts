@@ -6,7 +6,6 @@ import smellerRouter from "./modules/job_smeller/smeller.router"
 import { errorMiddleware } from "./middlewares/error.middleware";
 import { env } from "./config/env";
 export const app = express();
-
 app.use(
   cors({
     origin: env.ORIGIN_URL,
