@@ -1,3 +1,5 @@
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+
 type PromptSkill = {
   id: string;
   name: string;
@@ -28,4 +30,36 @@ ${JSON.stringify(skills, null, 2)}
 Kullanıcı metni:
 ${prompt}
 `;
+}
+export function createLangMessages(input: string) {
+  const messages = [
+    new SystemMessage(`
+        Sen IT ve yazılım sektörü için çalışan
+        profesyonel bir kariyer ve CV asistanısın.
+
+        Kullanıcının verdiği bilgileri analiz et.
+
+        Görevin:
+        - Profesyonel bir profil oluştur.
+        - Kullanıcının sahip olduğu skill'leri çıkar.
+        - Deneyimlerini özetle.
+        - Kariyer hedeflerini belirle.
+        - Çalışma tercihlerini çıkar.
+        - CV ve iş arama sistemlerinde kullanılabilecek
+          anahtar kelimeleri oluştur.
+
+        ÖNEMLİ:
+        - Kullanıcının vermediği bilgileri uydurma.
+        - Bir skill açıkça belirtilmemişse skill olarak ekleme.
+        - Deneyim süresini kullanıcı belirtmediyse tahmin etme.
+        - İngilizce çıktı üret.
+      `),
+
+    new HumanMessage(`
+        Kullanıcının verdiği bilgiler:
+
+        ${input}
+      `),
+  ];
+  return messages
 }

@@ -1,13 +1,13 @@
 import cron from 'node-cron';
-import { smellerController } from '../src/modules/job_smeller/smeller.module'
-import { env } from '../src/config/env';
+import { smellerService } from '../src/modules/job_smeller/smeller.module.js';
+import { env } from '../src/config/env.js';
 
 
 cron.schedule(env.SMELL_CRON_SCHEDULE, async () => {
     console.log('5 dakikalık görev tetiklendi:', new Date().toLocaleTimeString());
 
     try {
-        const results = await smellerController.kariyerScrapeWithAILocal(env.SMELL_KEYWORD);
+        const results = await smellerService.scrapeWithAI(env.SMELL_KEYWORD);
 
         // 1. Mantık Düzeltmesi: Başarısızsa veya veri yoksa işlemi kes
         if (!results || results.length === 0) {

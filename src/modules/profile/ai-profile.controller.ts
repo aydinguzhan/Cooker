@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { generateProfileFromPrompt } from "./ai-profile.service";
+import { generateProfileFromPrompt, ProfileService } from "./ai-profile.service";
 
 export async function generateProfileController(
   req: Request,
@@ -29,5 +29,15 @@ export async function generateProfileController(
     });
   } catch (error) {
     next(error);
+  }
+}
+export class ProfileController {
+  constructor(private readonly profileService: ProfileService) { }
+
+  async createProfile(req: Request, res: Response) {
+    const { prompt } = req.body;
+    const result = await this.profileService.createProfile(prompt)
+    console.log(result)
+    return res.send(result).status(200)
   }
 }

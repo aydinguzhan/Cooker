@@ -1,6 +1,8 @@
 import { gemini } from "../../providers/gemini.provider";
 import { buildProfilePrompt } from "./profile-ai.prompt";
 import { AiProfileSchema, responseSheme } from "./ai-profile.schema";
+import { ProfileController } from "./ai-profile.controller";
+import ProfileChainRepository from "./profile-chain.repository";
 
 type PromptSkill = {
   id: string;
@@ -97,4 +99,13 @@ export async function generateProfileFromPrompt(
   }
 
   return parsed.data;
+}
+
+export class ProfileService {
+  constructor(private readonly profileRepository: ProfileChainRepository) { }
+
+  async createProfile(input: string) {
+    return await this.profileRepository.createProfile(input)
+
+  }
 }
